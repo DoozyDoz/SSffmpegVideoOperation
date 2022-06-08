@@ -1,7 +1,11 @@
 package com.simform.videoimageeditor.videoProcessActivity
 
 import android.annotation.SuppressLint
+import android.database.Cursor
 import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
@@ -12,17 +16,9 @@ import com.simform.videooperations.CallBackOfQuery
 import com.simform.videooperations.Common
 import com.simform.videooperations.Common.getFileFromAssets
 import com.simform.videooperations.FFmpegCallBack
-import com.simform.videooperations.FFmpegQueryExtension
 import com.simform.videooperations.LogMessage
+import kotlinx.android.synthetic.main.activity_add_text_on_video.*
 import java.util.concurrent.CompletableFuture.runAsync
-import kotlinx.android.synthetic.main.activity_add_text_on_video.btnAdd
-import kotlinx.android.synthetic.main.activity_add_text_on_video.btnVideoPath
-import kotlinx.android.synthetic.main.activity_add_text_on_video.edtText
-import kotlinx.android.synthetic.main.activity_add_text_on_video.edtXPos
-import kotlinx.android.synthetic.main.activity_add_text_on_video.edtYPos
-import kotlinx.android.synthetic.main.activity_add_text_on_video.mProgressView
-import kotlinx.android.synthetic.main.activity_add_text_on_video.tvInputPathVideo
-import kotlinx.android.synthetic.main.activity_add_text_on_video.tvOutputPath
 
 class AddTextOnVideoActivity : BaseActivity(R.layout.activity_add_text_on_video, R.string.add_text_on_video) {
     private var isInputVideoSelected = false
@@ -35,6 +31,25 @@ class AddTextOnVideoActivity : BaseActivity(R.layout.activity_add_text_on_video,
         when (v?.id) {
             R.id.btnVideoPath -> {
                 Common.selectFile(this, maxSelection = 1, isImageSelection = false, isAudioSelection = false)
+//                val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+//                intent.type = "video/*";
+//                startActivityForResult(intent, 5)
+//
+//
+//                    if (mediaFiles != null && mediaFiles.isNotEmpty()) {
+//                        tvInputPathVideo.text = mediaFiles[0].path
+//                        isInputVideoSelected = true
+//                        runAsync {
+//                            retriever = MediaMetadataRetriever()
+//                            retriever?.setDataSource(tvInputPathVideo.text.toString())
+//                            val bit = retriever?.frameAtTime
+//                            width = bit?.width
+//                            height = bit?.height
+//                        }
+//                    } else {
+//                        Toast.makeText(this, getString(R.string.video_not_selected_toast_message), Toast.LENGTH_SHORT).show()
+//                    }
+
             }
             R.id.btnAdd -> {
                 when {
@@ -105,6 +120,42 @@ class AddTextOnVideoActivity : BaseActivity(R.layout.activity_add_text_on_video,
         btnVideoPath.isEnabled = false
         btnAdd.isEnabled = false
         mProgressView.visibility = View.VISIBLE
+    }
+
+    fun parsePath(uri: Uri?): String? {
+        val projection = arrayOf(MediaStore.Video.Media.DATA)
+        val cursor: Cursor? = contentResolver.query(uri!!, projection, null, null, null)
+        return if (cursor != null) {
+            val columnIndex: Int = cursor
+                .getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+            cursor.moveToFirst()
+            cursor.getString(columnIndex)
+        } else null
+    }
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (resultCode == RESULT_OK) {
+//            when (requestCode) {
+//                5 -> {
+//                    val videoUri: Uri = data?.data!!
+//                    val videoPath = parsePath(videoUri)
+//                }
+//            }
+//        }
+//    }
+
+    @Throws(IllegalArgumentException::class)
+    private fun getFileName(urim: Uri): String? {
+        val cursor = contentResolver.query(urim, null, null, null, null)
+        if (cursor!!.count <= 0) {
+            cursor.close()
+            throw IllegalArgumentException("Can't obtain file name, cursor is empty")
+        }
+        cursor.moveToFirst()
+        val fileName = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+        cursor.close()
+        return fileName
     }
 
     @SuppressLint("NewApi")

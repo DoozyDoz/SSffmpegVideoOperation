@@ -83,6 +83,7 @@
     <string name="font_not_selected">Font not selected</string>
     <string name="audio_remove_from_video">Audio Remove from Video</string>
     <string name="remove_audio">Remove Audio</string>
+    <string name="convert_to_audio">Convert to Audio</string>
     <string name="select_image_file">Select Image File</string>
     <string name="merge_image_and_audio">Merge Image And MP3 Audio</string>
     <string name="please_select_input_image">Please select input image</string>

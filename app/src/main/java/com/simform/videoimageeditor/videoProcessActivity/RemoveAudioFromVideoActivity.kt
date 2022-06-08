@@ -9,9 +9,8 @@ import com.simform.videoimageeditor.R
 import com.simform.videooperations.CallBackOfQuery
 import com.simform.videooperations.Common
 import com.simform.videooperations.FFmpegCallBack
-import com.simform.videooperations.FFmpegQueryExtension
 import com.simform.videooperations.LogMessage
-import kotlinx.android.synthetic.main.activity_remove_audio_from_video.btnRemove
+import kotlinx.android.synthetic.main.activity_remove_audio_from_video.btn_vid_to_aud
 import kotlinx.android.synthetic.main.activity_remove_audio_from_video.btnVideoPath
 import kotlinx.android.synthetic.main.activity_remove_audio_from_video.mProgressView
 import kotlinx.android.synthetic.main.activity_remove_audio_from_video.tvInputPathVideo
@@ -21,7 +20,7 @@ class RemoveAudioFromVideoActivity : BaseActivity(R.layout.activity_remove_audio
     private var isInputVideoSelected: Boolean = false
     override fun initialization() {
         btnVideoPath.setOnClickListener(this)
-        btnRemove.setOnClickListener(this)
+        btn_vid_to_aud.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -29,7 +28,7 @@ class RemoveAudioFromVideoActivity : BaseActivity(R.layout.activity_remove_audio
             R.id.btnVideoPath -> {
                 Common.selectFile(this, maxSelection = 1, isImageSelection = false, isAudioSelection = false)
             }
-            R.id.btnRemove -> {
+            R.id.btn_vid_to_aud -> {
                 when {
                     !isInputVideoSelected -> {
                         Toast.makeText(this, getString(R.string.input_video_validate_message), Toast.LENGTH_SHORT).show()
@@ -84,13 +83,13 @@ class RemoveAudioFromVideoActivity : BaseActivity(R.layout.activity_remove_audio
 
     private fun processStop() {
         btnVideoPath.isEnabled = true
-        btnRemove.isEnabled = true
+        btn_vid_to_aud.isEnabled = true
         mProgressView.visibility = View.GONE
     }
 
     private fun processStart() {
         btnVideoPath.isEnabled = false
-        btnRemove.isEnabled = false
+        btn_vid_to_aud.isEnabled = false
         mProgressView.visibility = View.VISIBLE
     }
 }

@@ -37,7 +37,7 @@
         android:id="@+id/btn_vid_to_aud"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/remove_audio"
+        android:text="@string/convert_to_audio"
         android:padding="10dp"
         android:layout_marginTop="20dp"
         android:textColor="@android:color/white"
