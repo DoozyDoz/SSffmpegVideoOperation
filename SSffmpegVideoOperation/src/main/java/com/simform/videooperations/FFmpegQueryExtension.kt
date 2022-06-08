@@ -8,8 +8,7 @@ public class FFmpegQueryExtension {
     public var FRAME_RATE: Int = 25 // Default value
 
     /**
-     * startTime = 00:00:00 HH:MM:SS
-     * endTime = 00:00:00 HH:MM:SS
+     * Cut video from startTime (00:00:00 HH:MM:SS) to endTime (00:00:00 HH:MM:SS)
      */
     fun cutVideo(inputVideoPath: String, startTime: String?, endTime: String?, output: String): Array<String> { Common.getFrameRate(inputVideoPath)
         val inputs: ArrayList<String> = ArrayList()
